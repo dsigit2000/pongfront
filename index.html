@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Pong - Identificación Inteligente con QR y NFC"/>
+    <meta name="keywords" content="QR, NFC, identificación, contacto, emergencia, seguridad"/>
+    <meta name="author" content="Pong"/>
+
+    <title>Pong - Identificación Inteligente con QR y NFC</title>
+
+    <!--== Google Fonts ==-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!--== Font Awesome ==-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ====== RESET Y VARIABLES ====== */
+        :root {
+            --primary-color: #d00000;
+            --secondary-color: #ff1e1e;
+            --accent-color: #ff5959;
+            --dark-red: #a00000;
+            --light-red: #ff8a8a;
+            --gradient-primary: linear-gradient(135deg, #d00000, #ff1e1e);
+            --gradient-secondary: linear-gradient(135deg, #ff1e1e 0%, #ff5959 100%);
+            --gradient-accent: linear-gradient(135deg, #ff5959, #ff8a8a);
+            --gradient-header: linear-gradient(135deg, #d00000, #ff1e1e, #ff5959);
+            --shadow-light: 0 5px 15px rgba(0,0,0,0.08);
+            --shadow-medium: 0 10px 25px rgba(0,0,0,0.15);
+            --shadow-heavy: 0 15px 35px rgba(0,0,0,0.2);
+            --shadow-header: 0 4px 20px rgba(208, 0, 0, 0.3);
+            --border-radius: 15px;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #fff;
+            color: #222;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ====== HEADER MEJORADO ====== */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--gradient-header);
+            box-shadow: var(--shadow-header);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 3rem;
+            transition: 0.3s ease;
+            height: 70px;
+        }
+
+        .header-scrolled {
+            padding: 0.4rem 3rem;
+            height: 60px;
+            background: rgba(208, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+            color: white;
+            background: rgba(255,255,255,0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav a {
+            padding: 8px 16px;
+            text-decoration: none;
+            color: rgba(255,255,255,0.9);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.15);
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        nav a:hover::before {
+            left: 0;
+        }
+
+        .nav-highlight {
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .cta-button {
+            background: white;
+            color: var(--primary-color);
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-left: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: var(--transition);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+            background: #f0f0f0;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ====== HERO ====== */
+        .hero {
+            height: 100vh;
+            background: var(--gradient-primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 1.5rem;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            margin-top: 70px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgZmlsbD0idXJsKCNwYXR0ZXJuKSIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIvPjwvc3ZnPg==');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            color: #fffafc;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: var(--primary-color);
+            font-weight: 700;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            background: var(--primary-color);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(208, 0, 0, 0.4);
+        }
+
+        /* ====== SECCIONES ====== */
+        section {
+            padding: 6rem 3rem;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--secondary-color);
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(208, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .card p {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ====== FEATURES ====== */
+        .pong-icon-bg {
+            background: var(--gradient-primary);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: var(--shadow-medium);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pong-icon-bg::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255,255,255,0.1);
+            transform: rotate(45deg);
+            transition: var(--transition);
+        }
+        
+        .pong-icon-bg:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .pong-icon-bg:hover::before {
+            transform: rotate(45deg) translate(10px, 10px);
+        }
+        
+        .pong-icon-bg i {
+            color: white;
+            font-size: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .user-type-card {
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: var(--border-radius);
+            background: white;
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .user-type-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition);
+        }
+        
+        .user-type-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .user-type-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .user-type-icon {
+            font-size: 40px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            transition: var(--transition);
+        }
+        
+        .user-type-card:hover .user-type-icon {
+            transform: scale(1.2);
+            color: var(--secondary-color);
+        }
+        
+        .pong-badge {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            box-shadow: var(--shadow-light);
+            margin-top: 10px;
+        }
+
+        /* ====== PRODUCTOS ====== */
+        .product-item {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+            background: white;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-item:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .product-thumb {
+            padding: 30px 20px 0;
+        }
+        
+        .product-info {
+            padding: 20px;
+            flex-grow: 1;
+        }
+        
+        .product-action {
+            padding: 0 20px 20px;
+        }
+        
+        .btn-product-cart {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 20px;
+            width: 100%;
+            font-weight: 600;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .btn-product-cart:hover {
+            background: var(--gradient-secondary);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        /* ====== TECH DEMO ====== */
+        .tech-demo {
+            background: var(--gradient-secondary);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .tech-demo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIyMCIgaGVpZ2htdD0iMjAiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IGZpbGw9InVybCgjcGF0dGVybikiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiLz48L3N2Zz4=');
+            opacity: 0.3;
+        }
+        
+        .tech-demo-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .tech-demo-text {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+        }
+        
+        .tech-demo-visual {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+        }
+
+        .pong-qr-demo {
+            max-width: 200px;
+            margin: 0 auto;
+            border: 2px solid white;
+            border-radius: 12px;
+            padding: 15px;
+            background: white;
+            box-shadow: var(--shadow-medium);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: var(--transition);
+        }
+        
+        .pong-qr-demo:hover {
+            transform: perspective(1000px) rotateY(0deg);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        /* ====== FOOTER ====== */
+        footer {
+            background: var(--primary-color);
+            color: #fff;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+            width: 100%;
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: underline;
+            margin: 0 0.5rem;
+        }
+
+        .footer-main {
+            padding: 60px 0 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .widget-title {
+            color: #fff;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .widget-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gradient-accent);
+        }
+
+        .social-icons a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            margin-right: 10px;
+            transition: var(--transition);
+            color: white;
+        }
+
+        .social-icons a:hover {
+            background: var(--gradient-accent);
+            transform: translateY(-3px);
+            color: #333;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 250px;
+            padding: 0 20px;
+            margin-bottom: 30px;
+        }
+
+        /* ====== ANIMACIONES ====== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 1024px) {
+            header {
+                padding: 0.6rem 2rem;
+            }
+            
+            .header-scrolled {
+                padding: 0.4rem 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 0.6rem 1.5rem;
+            }
+            
+            .header-scrolled {
+                padding: 0.4rem 1.5rem;
+            }
+
+            nav {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .logo {
+                font-size: 1.6rem;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .pong-icon-bg {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .pong-icon-bg i {
+                font-size: 30px;
+            }
+            
+            .tech-demo-content {
+                flex-direction: column;
+            }
+            
+            .footer-column {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ====== NAVBAR MEJORADA ====== -->
+    <header id="main-header">
+        <div class="logo-container">
+            <div class="logo-icon">
+                <i class="fas fa-qrcode"></i>
+            </div>
+            <a href="#" class="logo">PONG</a>
+        </div>
+        
+        <nav>
+            <a href="#inicio">Inicio</a>
+            <a href="#como-funciona">Cómo Funciona</a>
+            <a href="#para-quien">Para Quién</a>
+            <a href="#productos">Productos</a>
+            <a href="#contacto">Contacto</a>
+            <a href="#productos" class="cta-button">Comprar Ahora</a>
+        </nav>
+        
+        <button class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <!-- ====== HERO ====== -->
+    <section id="inicio" class="hero">
+        <div class="particles" id="particles-js"></div>
+        <div class="hero-content">
+            <h1>Tu Identidad Conectada al Instante</h1>
+            <p>Tecnología simple, rápida y segura para conectar con lo que más importa.</p>
+            <a href="#productos" class="btn-primary">OBTENER PONG</a>
+        </div>
+    </section>
+
+    <!-- ====== CÓMO FUNCIONA ====== -->
+    <section id="como-funciona">
+        <h5 class="section-subtitle">TECNOLOGÍA INTELIGENTE</h5>
+        <h2 class="section-title">Así de Simple es Pong</h2>
+        <div class="cards">
+            <div class="card fade-in">
+                <div class="pong-icon-bg">
+                    <i class="fas fa-id-card"></i>
+                </div>
+                <h3>Obtén tu Ficha</h3>
+                <p>Recibe tu ficha personalizada con tecnología QR y NFC integrada.</p>
+            </div>
+            <div class="card fade-in">
+                <div class="pong-icon-bg">
+                    <i class="fas fa-qrcode"></i>
+                </div>
+                <h3>Escanea</h3>
+                <p>Cualquier smartphone puede leer el código cuando sea necesario.</p>
+            </div>
+            <div class="card fade-in">
+                <div class="pong-icon-bg">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>Conecta</h3>
+                <p>Acceso directo a WhatsApp con tus contactos registrados.</p>
+            </div>
+            <div class="card fade-in">
+                <div class="pong-icon-bg">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3>Comunica</h3>
+                <p>Tus contactos reciben el mensaje inmediatamente.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== PARA QUIÉN ====== -->
+    <section id="para-quien">
+        <h5 class="section-subtitle">VERSÁTIL Y ÚTIL</h5>
+        <h2 class="section-title">Pong es Para Todos</h2>
+        <div class="cards">
+            <div class="user-type-card fade-in">
+                <i class="fas fa-user user-type-icon"></i>
+                <h4>Personas Activas</h4>
+                <p>Perfecto para deportistas, viajeros y cualquier persona que quiera mantener sus contactos accesibles.</p>
+                <span class="pong-badge">Recomendado</span>
+            </div>
+            <div class="user-type-card fade-in">
+                <i class="fas fa-home user-type-icon"></i>
+                <h4>Familias</h4>
+                <p>Ideal para niños, adolescentes y cualquier miembro de la familia que necesite contacto rápido.</p>
+                <span class="pong-badge">Familiar</span>
+            </div>
+            <div class="user-type-card fade-in">
+                <i class="fas fa-briefcase user-type-icon"></i>
+                <h4>Profesionales</h4>
+                <p>Excelente para trabajadores de campo, repartidores y profesionales móviles.</p>
+                <span class="pong-badge">Profesional</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== PRODUCTOS ====== -->
+    <section id="productos">
+        <h5 class="section-subtitle">NUESTRAS SOLUCIONES</h5>
+        <h2 class="section-title">Elige tu Pong</h2>
+        <div class="cards">
+            <div class="product-item fade-in">
+                <div class="product-thumb text-center">
+                    <div class="pong-icon-bg">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h4>Pong Básico</h4>
+                    <div class="prices">
+                        <span class="price">$19.99</span>
+                    </div>
+                    <p>Ficha estándar con QR para contacto inmediato.</p>
+                </div>
+                <div class="product-action">
+                    <button type="button" class="btn-product-cart">
+                        <i class="fas fa-shopping-bag"></i> Comprar
+                    </button>
+                </div>
+            </div>
+            <div class="product-item fade-in">
+                <div class="product-thumb text-center">
+                    <div class="pong-icon-bg">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h4>Pong NFC</h4>
+                    <div class="prices">
+                        <span class="price">$29.99</span>
+                    </div>
+                    <p>Tecnología NFC para escaneo ultrarrápido.</p>
+                </div>
+                <div class="product-action">
+                    <button type="button" class="btn-product-cart">
+                        <i class="fas fa-shopping-bag"></i> Comprar
+                    </button>
+                </div>
+            </div>
+            <div class="product-item fade-in">
+                <div class="product-thumb text-center">
+                    <div class="pong-icon-bg">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h4>Pong Premium</h4>
+                    <div class="prices">
+                        <span class="price">$39.99</span>
+                    </div>
+                    <p>Resistente al agua con diseño personalizado.</p>
+                </div>
+                <div class="product-action">
+                    <button type="button" class="btn-product-cart">
+                        <i class="fas fa-shopping-bag"></i> Comprar
+                    </button>
+                </div>
+            </div>
+            <div class="product-item fade-in">
+                <div class="product-thumb text-center">
+                    <div class="pong-icon-bg">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h4>Pack Familiar</h4>
+                    <div class="prices">
+                        <span class="price">$89.99</span>
+                    </div>
+                    <p>4 fichas Pong para toda la familia.</p>
+                </div>
+                <div class="product-action">
+                    <button type="button" class="btn-product-cart">
+                        <i class="fas fa-shopping-bag"></i> Comprar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== TECH DEMO ====== -->
+    <section>
+        <div class="tech-demo">
+            <div class="tech-demo-content">
+                <div class="tech-demo-text">
+                    <h5 class="sub-title text-white">TECNOLOGÍA AVANZADA</h5>
+                    <h2 class="title text-white">Probado y Confiable</h2>
+                    <p class="desc text-white">Nuestro sistema combina lo mejor del QR y NFC para ofrecerte una solución de contacto inmediato que realmente funciona.</p>
+                    <a class="btn-primary" href="#productos">Probar Ahora</a>
+                </div>
+                <div class="tech-demo-visual">
+                    <div class="pong-qr-demo">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wa.me/1234567890?text=Hola,%20encontré%20esta%20ficha%20Pong%20y%20necesito%20contactar%20con%20los%20contactos%20registrados" alt="QR Code Demo" width="150" height="150">
+                    </div>
+                    <p class="text-white mt-3">Escanea este código de prueba</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== SEGURIDAD ====== -->
+    <section>
+        <div class="cards">
+            <div class="card fade-in">
+                <div class="pong-icon-bg" style="width: 150px; height: 150px;">
+                    <i class="fas fa-lock" style="font-size: 60px;"></i>
+                </div>
+                <h3>Tu Privacidad Protegida</h3>
+                <p>En Pong valoramos tu privacidad. Tus datos de contacto están seguros y solo se comparten cuando alguien escanea tu ficha.</p>
+                <p>El sistema está diseñado para ser simple y efectivo, sin complicaciones técnicas. Solo escanea y conecta.</p>
+                <a class="btn-primary" href="#productos">Comenzar Ahora</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== CONTACTO ====== -->
+    <section id="contacto">
+        <h5 class="section-subtitle">CONTACTO</h5>
+        <h2 class="section-title">¿Listo para Comenzar?</h2>
+        <div class="cards">
+            <div class="card fade-in">
+                <i class="fas fa-phone pong-feature-icon"></i>
+                <h4>Llámanos</h4>
+                <p>Resolvemos todas tus dudas sobre Pong.</p>
+                <a class="btn-primary" href="tel:+1234567890">+1 234 567 890</a>
+            </div>
+            <div class="card fade-in">
+                <i class="fas fa-envelope pong-feature-icon"></i>
+                <h4>Escríbenos</h4>
+                <p>Te respondemos en menos de 24 horas.</p>
+                <a class="btn-primary" href="mailto:info@pong.com">info@pong.com</a>
+            </div>
+            <div class="card fade-in">
+                <i class="fas fa-rocket pong-feature-icon"></i>
+                <h4>Comienza Ahora</h4>
+                <p>Elige tu Pong y recíbelo en casa.</p>
+                <a class="btn-primary" href="#productos">Ver Productos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== FOOTER ====== -->
+    <footer>
+        <div class="footer-main">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <div class="widget-item widget-about">
+                        <h4 class="widget-title">Sobre Pong</h4>
+                        <p class="desc">Conectamos personas mediante tecnología simple y efectiva. Tu seguridad, nuestra prioridad.</p>
+                        <div class="social-icons">
+                            <a href="https://www.facebook.com/" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
+                            <a href="https://twitter.com/" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
+                            <a href="https://wa.me/1234567890" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <div class="widget-item nav-menu-item1">
+                        <h4 class="widget-title">Enlaces Rápidos</h4>
+                        <div class="widget-menu-wrap">
+                            <ul class="nav-menu">
+                                <li><a href="#inicio">Inicio</a></li>
+                                <li><a href="#como-funciona">Cómo Funciona</a></li>
+                                <li><a href="#para-quien">Para Quién</a></li>
+                                <li><a href="#productos">Productos</a></li>
+                                <li><a href="#contacto">Contacto</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <div class="widget-item">
+                        <h4 class="widget-title">¿Necesitas Ayuda?</h4>
+                        <div class="widget-contact-info">
+                            <p class="contact-info-desc">Estamos aquí para ayudarte con cualquier pregunta.</p>
+                            <div class="contact-item">
+                                <div class="icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div class="info">
+                                    <p><span>Soporte</span> <br><a href="tel://0123456789">+1 234 567 890</a></p>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="info">
+                                    <p><span>Email</span> <br><a href="mailto:soporte@pong.com">soporte@pong.com</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="footer-bottom-content">
+                            <p class="copyright">© 2023 Pong. Todos los derechos reservados.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animación de entrada para elementos
+        document.addEventListener('DOMContentLoaded', function() {
+            // Crear partículas para el hero
+            createParticles();
+            
+            // Animación de entrada para elementos con clase fade-in
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            fadeElements.forEach(element => {
+                fadeInObserver.observe(element);
+            });
+            
+            // Header scroll effect
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    header.classList.add('header-scrolled');
+                } else {
+                    header.classList.remove('header-scrolled');
+                }
+            });
+            
+            // Mobile menu toggle
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            mobileMenuBtn.addEventListener('click', function() {
+                const nav = document.querySelector('nav');
+                nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+            });
+        });
+        
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles-js');
+            if (!particlesContainer) return;
+            
+            const particleCount = 15;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Tamaño aleatorio
+                const size = Math.random() * 10 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Posición inicial aleatoria
+                particle.style.left = `${Math.random() * 100}%`;
+                
+                // Retraso de animación aleatorio
+                particle.style.animationDelay = `${Math.random() * 15}s`;
+                
+                // Duración de animación aleatoria
+                const duration = Math.random() * 10 + 10;
+                particle.style.animationDuration = `${duration}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+    </script>
+</body>
+</html>
