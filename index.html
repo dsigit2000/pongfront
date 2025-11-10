@@ -285,6 +285,11 @@
             margin: 0 auto;
         }
 
+        /* MODIFICACIÓN 1: Las 4 tarjetas de "Cómo funciona" en una sola línea */
+        .cards-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
         .card {
             background: #fff;
             border-radius: 20px;
@@ -527,6 +532,141 @@
             box-shadow: var(--shadow-heavy);
         }
 
+        /* ====== FORMULARIO DE CONTACTO ====== */
+        .contact-form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            padding: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(208, 0, 0, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .btn-submit {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: block;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-submit:hover {
+            background: var(--gradient-secondary);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: slideDown 0.3s ease;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Estilos para mensajes de error */
+        .form-text {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .char-count.warning {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
         /* ====== FOOTER ====== */
         footer {
             background: var(--primary-color);
@@ -655,6 +795,11 @@
             .header-scrolled {
                 padding: 0.4rem 2rem;
             }
+            
+            /* MODIFICACIÓN 1: Ajuste para pantallas medianas */
+            .cards-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 768px) {
@@ -706,6 +851,16 @@
             .footer-column {
                 min-width: 100%;
             }
+            
+            /* MODIFICACIÓN 1: Ajuste para pantallas pequeñas */
+            .cards-4 {
+                grid-template-columns: 1fr;
+            }
+            
+            /* MODIFICACIÓN 2: Ajuste del formulario para móviles */
+            .contact-form-container {
+                padding: 2rem 1.5rem;
+            }
         }
     </style>
 </head>
@@ -748,7 +903,8 @@
     <section id="como-funciona">
         <h5 class="section-subtitle">TECNOLOGÍA INTELIGENTE</h5>
         <h2 class="section-title">Así de Simple es Pong</h2>
-        <div class="cards">
+        <!-- MODIFICACIÓN 1: Agregamos la clase cards-4 para mostrar las 4 tarjetas en una línea -->
+        <div class="cards cards-4">
             <div class="card fade-in">
                 <div class="pong-icon-bg">
                     <i class="fas fa-id-card"></i>
@@ -929,25 +1085,36 @@
     <section id="contacto">
         <h5 class="section-subtitle">CONTACTO</h5>
         <h2 class="section-title">¿Listo para Comenzar?</h2>
-        <div class="cards">
-            <div class="card fade-in">
-                <i class="fas fa-phone pong-feature-icon"></i>
-                <h4>Llámanos</h4>
-                <p>Resolvemos todas tus dudas sobre Pong.</p>
-                <a class="btn-primary" href="tel:+1234567890">+1 234 567 890</a>
-            </div>
-            <div class="card fade-in">
-                <i class="fas fa-envelope pong-feature-icon"></i>
-                <h4>Escríbenos</h4>
-                <p>Te respondemos en menos de 24 horas.</p>
-                <a class="btn-primary" href="mailto:info@pong.com">info@pong.com</a>
-            </div>
-            <div class="card fade-in">
-                <i class="fas fa-rocket pong-feature-icon"></i>
-                <h4>Comienza Ahora</h4>
-                <p>Elige tu Pong y recíbelo en casa.</p>
-                <a class="btn-primary" href="#productos">Ver Productos</a>
-            </div>
+        
+        <div class="contact-form-container fade-in">
+            <div id="form-messages"></div>
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="name" class="form-label">Nombre</label>
+                    <input type="text" id="name" name="nombre" class="form-control" placeholder="Tu nombre completo" required>
+                    <small class="form-text" id="name-error" style="color: var(--primary-color); display: none;"></small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">Correo electrónico</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="tu.correo@ejemplo.com" required>
+                    <small class="form-text" id="email-error" style="color: var(--primary-color); display: none;"></small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message" class="form-label">Mensaje</label>
+                    <textarea id="message" name="mensaje" class="form-control" placeholder="¿En qué podemos ayudarte?" required minlength="10"></textarea>
+                    <small class="form-text" id="message-error" style="color: var(--primary-color); display: none;"></small>
+                    <div class="char-count" style="text-align: right; font-size: 0.8rem; color: #666; margin-top: 5px;">
+                        <span id="char-counter">0</span>/1000 caracteres
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-submit" id="submit-btn">
+                    <span id="submit-text">Enviar Mensaje</span>
+                    <span id="submit-loading" class="loading" style="display: none;"></span>
+                </button>
+            </form>
         </div>
     </section>
 
@@ -1087,6 +1254,216 @@
                 particlesContainer.appendChild(particle);
             }
         }
+
+        // ====== INTEGRACIÓN CON BACKEND NESTJS ======
+        const contactForm = document.getElementById('contact-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const submitText = document.getElementById('submit-text');
+        const submitLoading = document.getElementById('submit-loading');
+        const formMessages = document.getElementById('form-messages');
+
+        // Elementos para mostrar errores específicos
+        const nameError = document.getElementById('name-error');
+        const emailError = document.getElementById('email-error');
+        const messageError = document.getElementById('message-error');
+        const charCounter = document.getElementById('char-counter');
+
+        // Configuración
+        const API_URL = 'http://localhost:3000/contact'; // Ajusta si es necesario
+
+        // Contador de caracteres para el mensaje
+        if (document.getElementById('message')) {
+            document.getElementById('message').addEventListener('input', function() {
+                const count = this.value.length;
+                charCounter.textContent = count;
+                
+                if (count > 1000) {
+                    this.style.borderColor = 'var(--primary-color)';
+                    charCounter.style.color = 'var(--primary-color)';
+                } else {
+                    this.style.borderColor = '#ddd';
+                    charCounter.style.color = '#666';
+                }
+            });
+        }
+
+        // Función para limpiar errores
+        function clearErrors() {
+            nameError.style.display = 'none';
+            emailError.style.display = 'none';
+            messageError.style.display = 'none';
+            
+            // Remover estilos de error de los inputs
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.style.borderColor = '#ddd';
+            });
+        }
+
+        // Función para mostrar error específico en un campo
+        function showFieldError(field, message) {
+            const errorElement = document.getElementById(`${field}-error`);
+            const inputElement = document.getElementById(field);
+            
+            if (errorElement && inputElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+                inputElement.style.borderColor = 'var(--primary-color)';
+            }
+        }
+
+        // Función para mostrar mensaje de éxito/error
+        function showMessage(message, type = 'success') {
+            formMessages.innerHTML = `
+                <div class="alert ${type === 'success' ? 'alert-success' : 'alert-error'}">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'}"></i> 
+                    ${message}
+                </div>
+            `;
+            
+            // Desplazarse al mensaje
+            formMessages.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Función para manejar el estado del botón de envío
+        function setSubmitButtonState(loading = false) {
+            submitBtn.disabled = loading;
+            submitText.style.display = loading ? 'none' : 'inline';
+            submitLoading.style.display = loading ? 'inline-block' : 'none';
+        }
+
+        // Validación del formulario en el cliente
+        function validateForm(formData) {
+            let isValid = true;
+            
+            // Validar nombre
+            if (!formData.nombre || formData.nombre.length < 2) {
+                showFieldError('name', 'El nombre debe tener al menos 2 caracteres');
+                isValid = false;
+            }
+            
+            // Validar email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!formData.email || !emailRegex.test(formData.email)) {
+                showFieldError('email', 'Por favor ingresa un email válido');
+                isValid = false;
+            }
+            
+            // Validar mensaje
+            if (!formData.mensaje || formData.mensaje.length < 10) {
+                showFieldError('message', 'El mensaje debe tener al menos 10 caracteres');
+                isValid = false;
+            }
+            
+            if (formData.mensaje.length > 1000) {
+                showFieldError('message', 'El mensaje no puede exceder los 1000 caracteres');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+
+        // Manejar el envío del formulario
+        if (contactForm) {
+            contactForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Limpiar errores anteriores
+                clearErrors();
+                formMessages.innerHTML = '';
+                
+                // Obtener los valores del formulario
+                const formData = {
+                    nombre: document.getElementById('name').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    mensaje: document.getElementById('message').value.trim()
+                };
+                
+                // Validar en el cliente
+                if (!validateForm(formData)) {
+                    return;
+                }
+                
+                // Mostrar estado de carga
+                setSubmitButtonState(true);
+                
+                try {
+                    // Enviar datos al backend NestJS
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.success) {
+                        // Mostrar mensaje de éxito
+                        showMessage(data.message, 'success');
+                        
+                        // Limpiar el formulario
+                        contactForm.reset();
+                        charCounter.textContent = '0';
+                        
+                        // Opcional: Ocultar el mensaje después de 5 segundos
+                        setTimeout(() => {
+                            formMessages.innerHTML = '';
+                        }, 5000);
+                        
+                    } else {
+                        // Manejar errores del servidor
+                        let errorMessage = 'Error al enviar el mensaje';
+                        
+                        if (data.message) {
+                            errorMessage = data.message;
+                        } else if (data.error) {
+                            errorMessage = data.error;
+                        } else if (Array.isArray(data.message)) {
+                            // Si es un array de errores de validación
+                            errorMessage = data.message.join(', ');
+                        }
+                        
+                        showMessage(errorMessage, 'error');
+                    }
+                    
+                } catch (error) {
+                    // Mostrar error de conexión
+                    console.error('Error de conexión:', error);
+                    showMessage('Error de conexión. Por favor, verifica que el servidor esté ejecutándose e intenta nuevamente.', 'error');
+                } finally {
+                    // Restaurar estado normal del botón
+                    setSubmitButtonState(false);
+                }
+            });
+        }
+
+        // Validación en tiempo real
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('.form-control');
+            
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    const formData = {
+                        nombre: document.getElementById('name')?.value.trim() || '',
+                        email: document.getElementById('email')?.value.trim() || '',
+                        mensaje: document.getElementById('message')?.value.trim() || ''
+                    };
+                    
+                    validateForm(formData);
+                });
+                
+                // Limpiar error cuando el usuario empiece a escribir
+                input.addEventListener('input', function() {
+                    const errorElement = document.getElementById(`${this.id}-error`);
+                    if (errorElement) {
+                        errorElement.style.display = 'none';
+                        this.style.borderColor = '#ddd';
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
