@@ -477,7 +477,10 @@
         .tech-demo {
             background: var(--gradient-secondary);
             border-radius: var(--border-radius);
-            padding: 40px;
+            padding-left: 30px;
+            padding-right: 30px;
+            padding-bottom: 30px;
+            padding-top: 30px;
             color: white;
             text-align: center;
             position: relative;
@@ -494,7 +497,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIyMCIgaGVpZ2htdD0iMjAiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IGZpbGw9InVybCgjcGF0dGVybikiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiLz48L3N2Zz4=');
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgZmlsbD0idXJsKCNwYXR0ZXJuKSIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIvPjwvc3ZnPg==');
             opacity: 0.3;
         }
         
@@ -503,22 +506,31 @@
             z-index: 1;
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
+            justify-content: center; /* Cambiado de space-between a center */
             align-items: center;
             max-width: 1200px;
             margin: 0 auto;
+            text-align: center; /* Añadido para centrar el texto */
         }
         
         .tech-demo-text {
             flex: 1;
             min-width: 300px;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Añadido para centrar contenido interno */
+            justify-content: center;
         }
         
         .tech-demo-visual {
             flex: 1;
             min-width: 300px;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Añadido para centrar contenido interno */
+            justify-content: center;
         }
 
         .pong-qr-demo {
@@ -852,6 +864,21 @@
             
             .tech-demo-content {
                 flex-direction: column;
+                text-align: center;
+            }
+            
+            .tech-demo-text, 
+            .tech-demo-visual {
+                width: 100%;
+                padding: 15px 10px;
+            }
+            
+            .tech-demo-text h2,
+            .tech-demo-text h5,
+            .tech-demo-text p {
+                text-align: center;
+                margin-left: auto;
+                margin-right: auto;
             }
             
             .footer-column {
@@ -875,7 +902,10 @@
     <!-- ====== NAVBAR MEJORADA ====== -->
     <header id="main-header">
         <div class="logo-container">
-            <img src="assets/pong.png" alt="Pong" class="logo-img">
+            <div class="logo-icon">
+                <i class="fas fa-qrcode"></i>
+            </div>
+            <a href="#inicio" class="logo">PONG</a>
         </div>
         
         <nav>
@@ -898,14 +928,14 @@
         <div class="hero-content">
             <h1>Tu Identidad Conectada al Instante</h1>
             <p>Tecnología simple, rápida y segura para conectar con lo que más importa.</p>
-            <a href="#productos" class="btn-primary">OBTENER PING</a>
+            <a href="#productos" class="btn-primary">OBTENER PONG</a>
         </div>
     </section>
 
     <!-- ====== CÓMO FUNCIONA ====== -->
     <section id="como-funciona">
         <h5 class="section-subtitle">TECNOLOGÍA INTELIGENTE</h5>
-        <h2 class="section-title">Así de Simple es Ping</h2>
+        <h2 class="section-title">Así de Simple es Pong</h2>
         <!-- MODIFICACIÓN 1: Agregamos la clase cards-4 para mostrar las 4 tarjetas en una línea -->
         <div class="cards cards-4">
             <div class="card fade-in">
@@ -942,7 +972,7 @@
     <!-- ====== PARA QUIÉN ====== -->
     <section id="para-quien">
         <h5 class="section-subtitle">VERSÁTIL Y ÚTIL</h5>
-        <h2 class="section-title">Ping es Para Todos</h2>
+        <h2 class="section-title">Pong es Para Todos</h2>
         <div class="cards">
             <div class="user-type-card fade-in">
                 <i class="fas fa-user user-type-icon"></i>
@@ -968,7 +998,7 @@
     <!-- ====== PRODUCTOS ====== -->
     <section id="productos">
         <h5 class="section-subtitle">NUESTRAS SOLUCIONES</h5>
-        <h2 class="section-title">Elige tu Ping</h2>
+        <h2 class="section-title">Elige tu Pong</h2>
         <div class="cards">
             <div class="product-item fade-in">
                 <div class="product-thumb text-center">
@@ -977,7 +1007,7 @@
                     </div>
                 </div>
                 <div class="product-info">
-                    <h4>Ping Básico</h4>
+                    <h4>Pong Básico</h4>
                     <div class="prices">
                         <span class="price">$19.99</span>
                     </div>
@@ -996,7 +1026,7 @@
                     </div>
                 </div>
                 <div class="product-info">
-                    <h4>Ping NFC</h4>
+                    <h4>Pong NFC</h4>
                     <div class="prices">
                         <span class="price">$29.99</span>
                     </div>
@@ -1015,7 +1045,7 @@
                     </div>
                 </div>
                 <div class="product-info">
-                    <h4>Ping Premium</h4>
+                    <h4>Pong Premium</h4>
                     <div class="prices">
                         <span class="price">$39.99</span>
                     </div>
@@ -1038,7 +1068,7 @@
                     <div class="prices">
                         <span class="price">$89.99</span>
                     </div>
-                    <p>4 fichas Ping para toda la familia.</p>
+                    <p>4 fichas Pong para toda la familia.</p>
                 </div>
                 <div class="product-action">
                     <button type="button" class="btn-product-cart">
@@ -1061,7 +1091,7 @@
                 </div>
                 <div class="tech-demo-visual">
                     <div class="pong-qr-demo">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wa.me/1234567890?text=Hola,%20encontré%20esta%20ficha%20Ping%20y%20necesito%20contactar%20con%20los%20contactos%20registrados" alt="QR Code Demo" width="150" height="150">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wa.me/1234567890?text=Hola,%20encontré%20esta%20ficha%20Pong%20y%20necesito%20contactar%20con%20los%20contactos%20registrados" alt="QR Code Demo" width="150" height="150">
                     </div>
                     <p class="text-white mt-3">Escanea este código de prueba</p>
                 </div>
